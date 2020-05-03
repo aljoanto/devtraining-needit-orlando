@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sysevent_in_email_action">
+    <sysevent_in_email_action action="INSERT_OR_UPDATE">
+        <action>record_action</action>
+        <active>true</active>
+        <assignment_operator/>
+        <condition_script>(email.subject.indexOf('NI') &gt; -1)</condition_script>
+        <description/>
+        <event_name>email.read</event_name>
+        <filter_condition/>
+        <from/>
+        <name>Ical Response</name>
+        <order>100</order>
+        <reply_email/>
+        <required_roles/>
+        <script><![CDATA[var sbj = email.subject;       //email subject
+var body = email.body_text;       //email body
+gs.info("TCAL : sbj " + sbj);
+/*var sysbody = body.indexOf('UID:needit');
+	var sysid = body.slice(sysbody +10, sysbody + 42);       //get the custom identifier of the outlook event
+	gs.info(sysid + ' TCAL : sys id of table_name record');*/
+var IdSbj = sbj.indexOf('NI');
+var getNum = sbj.slice(IdSbj , IdSbj+8);
+gs.info( 'TCAL : ni index'+IdSbj+" getNum"+getNum);
+
+//See if the sys_id from the subject line returns any records
+/*var ga = new GlideAggregate('x_58872_needit_needit');
+	ga.addAggregate('COUNT');
+	//ga.addQuery('sys_id',sysid);
+	ga.addQuery('number',getNum);
+	ga.query();
+	var answer = 0;
+	if (ga.next()) {
+	  answer = ga.getAggregate('COUNT');
+	  //If there are no records, create a log
+	  if (answer == 0) {
+		gs.info("TCAL : No meeting response " + sbj);
+		//Record has been found. Update the invite response fields
+	  } else {*/
+var gr = new GlideRecord('x_58872_needit_needit');
+//gr.addQuery('sys_id',sysid);
+gr.addQuery('number',getNum);
+gr.query();
+while (gr.next()){
+	gs.info("TCAL :Test ");
+	if (sbj.indexOf('Accepted') > -1){
+		gr.state = 15;
+		gr.comments = 'Accepted by '+email.from;
+	} else if (sbj.indexOf('Tentative') > -1){
+		gr.state = 14;
+		gr.comments = email.from+' marked Tentative';
+	} else if (sbj.indexOf('Declined') > -1){
+		gr.state = 8;
+		gr.comments = 'Declined by '+email.from;
+	}
+	/*  var responsenotes = gr.comments;
+		  var bslice = body.indexOf('BEGIN:VCALENDAR');
+		  if (bslice == -1) {
+			gr.comments = body + '\n\n' + responsenotes;
+		  } else if (bslice > 0) {
+			var sbody = body.slice(0, bslice);
+			gr.comments = sbody + '\n\n' + responsenotes;
+		  }*/
+	gr.update();
+}
+//}
+//}
+]]></script>
+        <stop_processing>false</stop_processing>
+        <sys_class_name>sysevent_in_email_action</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-03-09 09:59:31</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>9db13f7bdb9bc810bd2d924bdb961986</sys_id>
+        <sys_mod_count>21</sys_mod_count>
+        <sys_name>Ical Response</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
+        <sys_update_name>sysevent_in_email_action_9db13f7bdb9bc810bd2d924bdb961986</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-03-10 07:46:44</sys_updated_on>
+        <table>x_58872_needit_needit</table>
+        <template/>
+        <type>reply</type>
+    </sysevent_in_email_action>
+</record_update>

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element audit="true" extends="task" label="NeedIt" max_length="40" name="x_58872_needit_needit" sizeclass="63" type="collection">
         <element label="New field 1" max_length="40" name="new_field_1" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="meet end" max_length="40" name="u_end_time" type="glide_date_time"/>
+        <element label="time 1" max_length="40" name="u_glide_time_1" type="glide_time"/>
+        <element label="New UTC Time" max_length="40" name="u_glide_utc_time_2" type="glide_utc_time"/>
         <element label="Requested for" mandatory="true" max_length="32" name="u_requested_for" reference="sys_user" type="reference"/>
         <element attributes="edge_encryption_enabled=true" choice="3" default="legal" label="Request type" mandatory="true" max_length="40" name="u_request_type" type="string">
             <choice>
@@ -11,6 +14,7 @@
             </choice>
         </element>
         <element attributes="edge_encryption_enabled=true" label="Other" max_length="40" name="u_string_3" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="meet sart" max_length="40" name="u_strt_time" type="glide_date_time"/>
         <element attributes="edge_encryption_enabled=true" choice="3" default="legal1" label="What needed" mandatory="true" max_length="40" name="u_what_needed" type="string">
             <choice>
                 <element inactive_on_update="false" label="Human Resources 1" sequence="0" value="hr1"/>
